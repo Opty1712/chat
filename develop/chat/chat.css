@@ -1,0 +1,62 @@
+.chatHistory {
+    width: 90%;
+    margin: 0 auto;
+    height: 500px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background: #fafafa;
+    overflow: auto;
+}
+
+.chatWelcome {
+    width: 90%;
+    margin: 0 auto;
+}
+.chatUsername {
+    font-weight: bold;
+}
+
+.chatForm {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.chatForm textarea{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    margin: 0 auto;
+    height: 80px;
+    border: 1px solid #999;
+    border-radius: 5px
+}
+
+.chatForm button{
+    float: right;
+    padding: 0;
+    margin: 0;
+    width: 10%;
+    margin: 0 auto;
+}
+
+.chatLogin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(100, 200, 255, 0.8);
+}
+
+.chatLogin div {
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 20%;
+}
+
+.chatError {
+    color: red;
+}
