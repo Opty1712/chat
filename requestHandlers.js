@@ -24,7 +24,7 @@ function upload(response, request) {
 	console.log("parsing done");
 
 		console.log (files.upload);
-/* Возможна ошибка в Windows: попытка переименования уже существующего файла */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ Windows: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 	fs.rename(files.upload.path, "tmp/test.png", function(err) {
 	  if (err) {
 		fs.unlink("tmp/test.png");
