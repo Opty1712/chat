@@ -1,11 +1,22 @@
-DESCRIPTION
+<!doctype html>
+<html lang="ru">
+<head>
+    <title>2Gis чат</title>
+    <meta charset="UTF-8">
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script defer src="app.js"></script>
+</head>
+<body>
 
-Frontend simple chat using webpack. Written on ES6 class with Babel support
+<div class='chat_main'></div>
 
-INSTALLATION
 
-1) run "npm i" - it will load all dependencies from package.json
-
-2) run "webpack" - it will build app.js and move it to the root folder
-
-2.1) use "NODE_ENV=development" or "NODE_ENV=production" for developing/production
+<script>
+    'use strict';
+    let elem = document.querySelector(".chat_main");
+    let CHAT_OPTIONS = {
+        elem : elem
+    }
+</script>
+</body>
+</html>

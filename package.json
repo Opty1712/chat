@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "formidable": "^1",
     "webpack": "^1",
     "babel-core": "^6",
     "babel-loader": "^6",

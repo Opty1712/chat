@@ -1,58 +1,72 @@
+"use strict";
+
 var querystring = require("querystring"),
-	fs = require("fs"),
-	formidable = require("formidable");
+	fs = require("fs");
 
-function start(response) {
-  console.log("Request handler 'start' was called.");
+var chat = {};
+chat.users = [];
+chat.messages = [];
 
-  fs.readFile ("index.html", {encoding: "utf-8"},function (err, data) {
-	  if (err) {
-		  console.log (err);
-	  } else {
-		  response.write(data);
-	  }
-  });
+// start chat
+function start (response) {
+	console.log(chat);
 
-}
-
-function upload(response, request) {
-  console.log("Request handler 'upload' was called.");
-
-  var form = new formidable.IncomingForm();
-  console.log("about to parse");
-  form.parse(request, function(error, fields, files) {
-	console.log("parsing done");
-
-		console.log (files.upload);
-/* �������� ������ � Windows: ������� �������������� ��� ������������� ����� */
-	fs.rename(files.upload.path, "tmp/test.png", function(err) {
-	  if (err) {
-		fs.unlink("tmp/test.png");
-		fs.rename(files.upload.path, "tmp/test.png");
-	  }
+	fs.readFile ("index.html", {encoding: "utf-8"},function (error, data) {
+		if (error) {
+			console.log (error);
+		} else {
+			response.writeHead(200, {"Content-Type": "text/html"});
+			response.write(data);
+			response.end();
+		}
 	});
-	response.writeHead(200, {"Content-Type": "text/html"});
-	response.write("received image:<br/>");
-	response.write("<img src='/show' />");
-	response.end();
-  });
+
 }
 
-function show(response) {
-  console.log("Request handler 'show' was called.");
-  fs.readFile("tmp/test.png", "binary", function(error, file) {
-	if(error) {
-	  response.writeHead(500, {"Content-Type": "text/plain"});
-	  response.write(error + "\n");
-	  response.end();
-	} else {
-	  response.writeHead(200, {"Content-Type": "image/png"});
-	  response.write(file, "binary");
-	  response.end();
-	}
-  });
+// get app.js to browser
+function app (response) {
+	console.log("Request handler 'app' was called.");
+
+	fs.readFile("app.js", "binary", function(error, data) {
+		if(error) {
+			console.log (error);
+		} else {
+			response.writeHead(200, {"Content-Type": "text/script"});
+			response.write(data, "binary");
+			response.end();
+		}
+	});
+
+}
+
+// get users
+function users (response, request) {
+	console.log("Request handler 'login' was called.");
+
+	let name = "";
+	request.on ("readable", function () {
+		name = JSON.parse(request.read()).name;
+	})
+	.on ("end", function () {
+		name = JSON.parse(name);
+		console.log (name);
+		chat.users.push(1);
+	});
+	response.end();
+}
+
+// get messages
+function messages(response, request) {
+	console.log("Request handler 'messages' was called.");
+}
+
+// send message
+function send(response, request) {
+	console.log("Request handler 'send' was called.");
 }
 
 exports.start = start;
-exports.upload = upload;
-exports.show = show;
+exports.send = send;
+exports.messages = messages;
+exports.users = users;
+exports.app = app;

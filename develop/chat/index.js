@@ -59,12 +59,12 @@ export default class Chat {
     }
 
     // login from mouse click || from _keyLogin
-    _login (name) {
+    _login () {
 
         let xhr = new XMLHttpRequest();
-        xhr.open ("GET", "/send", true);
-        xhr.send ();
-        this._loginInput.value;
+        xhr.open ("POST", "/login", true);
+        xhr.send (JSON.stringify({"name" : this._loginInput.value}));
+        console.log (xhr);
         this._elem.querySelector(".chatLogin").hidden = true;
         return false;
 
