@@ -7,6 +7,7 @@ Working under WINDOWS:
 
 
 
+
 INSTALLATION
 
 1) run "npm i" - it will load all dependencies from package.json
@@ -17,7 +18,7 @@ INSTALLATION
 
 2.2) use "NODE_ENV=production" for production (watch = false, minification = true, NO devtool)
 
-3) start app "node index.js" and banigate your browser to http://127.0.0.1:8080/
+3) start app "node index.js" and navigate your browser to http://127.0.0.1:8080/
 
 
 
