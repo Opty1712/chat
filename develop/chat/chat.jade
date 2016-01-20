@@ -1,11 +1,14 @@
 div.chatWelcome    2gis чат
     span.chatUsername
 
-div.chatHistory
+div.chatCommon
+    div.chatHistory
+    div.chatUsers
 
-form.chatForm
-    textarea
+div.chatForm
+    textarea(placeholder="Для отправки сообщения в чат:\r\n - нажать CTRL+ENTER \r\n - кликнуть кнопку ниже")
     button Отправить
+    span.chatError
 
 div.chatLogin
     div

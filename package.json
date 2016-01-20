@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "webpack": "^1",
     "babel-core": "^6",
     "babel-loader": "^6",
     "babel-preset-es2015": "^6",
