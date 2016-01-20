@@ -10,6 +10,8 @@ Working under WINDOWS:
 
 INSTALLATION
 
+0) clone in root project folder "git clone https://github.com/Opty1712/chat.git ."
+
 1) run "npm i" - it will load all dependencies from package.json
 
 2) run "webpack" - it will build "app.js" and move it to the root folder
