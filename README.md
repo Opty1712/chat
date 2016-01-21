@@ -10,7 +10,7 @@ Working under WINDOWS:
 
 INSTALLATION
 
-0) clone in root project folder "git clone https://github.com/Opty1712/chat.git ."
+0) clone CHAT to the project folder "git clone https://github.com/Opty1712/chat.git"
 
 1) run "npm i" - it will load all dependencies from package.json
 
@@ -20,7 +20,7 @@ INSTALLATION
 
 2.2) use "NODE_ENV=production" for production (watch = false, minification = true, NO devtool)
 
-3) start app "node index.js" and navigate your browser to http://127.0.0.1:8080/
+3) start app "node server.js" and navigate your browser to http://127.0.0.1:8080/
 
 
 

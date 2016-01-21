@@ -9,7 +9,7 @@ chat.messages = [];
 
 // start chat
 function start (response) {
-    console.log("Request handler '/' was called.");
+	console.log("Request handler '/' was called.");
 
 	fs.readFile ("index.html", {encoding: "utf-8"},function (error, data) {
 		if (error) {
@@ -51,7 +51,7 @@ function users (response, request) {
 		name = String(name);
 	})
 
-	.on ("end", function () {
+		.on ("end", function () {
 		if (name != "") {
 			if  (chat.users.length > 0) {
 				if (chat.users.indexOf(name) != "-1") {
@@ -63,20 +63,15 @@ function users (response, request) {
 		}
 
 		if (err != "") {
+			console.log (err);
 			response.write(JSON.stringify({error : err}));
 		} else {
 			chat.users.push (name);
 			response.write(JSON.stringify({name : name}));
 			addMessage ("<i>Вошел пользователь <b>" + name + "</b></i>");
-            response.end();
 		}
-	})
-
-     .on ("close", function () {
-        // НИКАК СЮДА НЕ ПРОВАЛИВАЕТСЯ.....
-        addMessage ("<i>Ушел пользователь <b>" + name + "</b></i>");
-        chat.users.splice(chat.users.indexOf (name), 1);
-    });
+		response.end();
+	});
 }
 
 // get messages
@@ -85,51 +80,64 @@ function messages(response, request) {
 
 	if (chat.messages.length > 0) {
 
-        let messages =  chat.messages.reduceRight(function(sum, current) {
-            return (sum + "<br><br>" + current);
-        });
-        let users =  chat.users.reduce(function(sum, current) {
-            return (sum + "<p>" + current);
-        },"<p>");
+		let messages =  chat.messages.reduceRight(function(sum, current) {
+			return (sum + "<br><br>" + current);
+		});
+		let users =  chat.users.reduce(function(sum, current) {
+			return (sum + "<p>" + current);
+		},"<p>");
 
-        response.write(JSON.stringify({"messages" : messages, "users" : users}));
-        response.end();
-    }
+		response.write(JSON.stringify({"messages" : messages, "users" : users}));
+		response.end();
+	}
 }
 
 // send message
 function send(response, request) {
 	console.log("Request handler 'send' was called.");
 
-    let mess = "",
-        user = "",
-        err = "";
+	let mess = "",
+		user = "",
+		err = "";
 
-    request.on ("readable", function () {
-        let read = JSON.parse(request.read());
-        mess = String(read.meassage);
-        user = String(read.user);
-    })
+	request.on ("readable", function () {
+		let read = JSON.parse(request.read());
+		mess = String(read.meassage);
+		user = String(read.user);
+	})
 
-    .on ("end", function () {
+		.on ("end", function () {
 
-        if (err != "") {
-            response.write(JSON.stringify({error : err}));
-        } else {
-            response.write(JSON.stringify({status : "ok"}));
-            let message = "<b>" + user + "</b>: " + mess;
-            addMessage (message);
-        }
-        response.end();
-    });
+		if (err != "") {
+			response.write(JSON.stringify({error : err}));
+		} else {
+			response.write(JSON.stringify({status : "ok"}));
+			let message = "<b>" + user + "</b>: " + mess;
+			addMessage (message);
+		}
+		response.end();
+	});
 }
 
 // add system message
 function addMessage (mess) {
 	let now = new Date();
-    let sec = now.getSeconds();
-    if (sec < 10) sec = "0" + sec;
+	let sec = now.getSeconds();
+	if (sec < 10) sec = "0" + sec;
 	chat.messages.push (`<u>${now.getHours()}:${now.getMinutes()}:${sec}</u> /  ${mess}`);
+}
+
+// close chat
+function close (response, request) {
+	console.log("Request handler '/close' was called.");
+
+	request.on ("readable", function () {
+		let name = JSON.parse(request.read()).name;
+		name = String(name);
+		addMessage ("<i>Ушел пользователь <b>" + name + "</b></i>");
+		chat.users.splice(chat.users.indexOf (name), 1);
+	});
+
 }
 
 exports.start = start;
@@ -137,3 +145,4 @@ exports.send = send;
 exports.messages = messages;
 exports.users = users;
 exports.app = app;
+exports.close = close;
