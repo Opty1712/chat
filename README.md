@@ -20,7 +20,7 @@ Working under WINDOWS:
 
   3.2. use `NODE_ENV=production` for production {*watch : false, minification : true, NO devtool*}
 
-4. start app `node server.js` and navigate your browser to [](http://127.0.0.1:8080/)
+4. start app `node server.js` and navigate your browser to [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 
 
 
