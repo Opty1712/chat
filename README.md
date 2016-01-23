@@ -1,4 +1,4 @@
-DESCRIPTION
+#DESCRIPTION
 
 Frontend simple chat using webpack. Written on ES6 class with Babel 6 support
 Working under WINDOWS:
@@ -8,7 +8,7 @@ Working under WINDOWS:
 
 
 
-INSTALLATION
+#INSTALLATION
 
 0) clone CHAT to the project folder "git clone https://github.com/Opty1712/chat.git"
 
