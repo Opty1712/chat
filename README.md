@@ -1,4 +1,4 @@
-#DESCRIPTION
+#Description
 
 Frontend simple chat using webpack. Written on ES6 class with Babel 6 support
 Working under WINDOWS:
@@ -8,7 +8,7 @@ Working under WINDOWS:
 
 
 
-#INSTALLATION
+#Installation
 
 1. clone CHAT to the project folder `git clone https://github.com/Opty1712/chat.git`
 
@@ -24,6 +24,6 @@ Working under WINDOWS:
 
 
 
-#KNOWN ISSUES
+#Known Issues
 
 If project runs not under WINDOWS may be you need to check **lines 19-20** in `webpack.config.js`
