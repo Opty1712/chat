@@ -10,7 +10,7 @@ Working under WINDOWS:
 
 #INSTALLATION
 
-1. clone CHAT to the project folder "git clone https://github.com/Opty1712/chat.git"
+1. clone CHAT to the project folder `git clone https://github.com/Opty1712/chat.git`
 
 2. run `npm i` - it will load all dependencies from package.json
 
