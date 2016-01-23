@@ -2,8 +2,8 @@
 
 Frontend simple chat using webpack. Written on ES6 class with Babel 6 support
 Working under WINDOWS:
-- NODE v5.4.1
-- npm v3.5.3
+* NODE v5.4.1
+* npm v3.5.3
 
 
 
