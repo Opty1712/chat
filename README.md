@@ -28,8 +28,9 @@ Working under WINDOWS:
 
 If project runs not under WINDOWS may be you need to check **lines 19-20** in `webpack.config.js`
 
+
+
 #RoadMap
 
 1. Remove HTML tags from server side code
 2. Add animations
-3. 
