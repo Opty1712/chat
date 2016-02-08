@@ -1,7 +1,7 @@
 // add dependencies
 var http = require("http");
 var url = require("url");
-var chat = require("./chat");
+var chat = require("./server-chat");
 
 // create callback functions object
 var handle = {};

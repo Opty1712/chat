@@ -32,6 +32,4 @@ If project runs not under WINDOWS may be you need to check **lines 19-20** in `w
 
 #RoadMap
 
-1. Remove HTML tags from server side code
-2. Add error handlers for all methods
-3. Add animations
+1. Add animations

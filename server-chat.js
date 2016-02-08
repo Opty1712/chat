@@ -43,15 +43,16 @@ function app (response) {
 function users (response, request) {
 	console.log("Request handler 'login' was called.");
 
-	let name = "",
+	let answer = "",
+		name = "",
 		err = "";
 
-	request.on ("readable", function () {
-		name = JSON.parse(request.read()).name;
-		name = String(name);
+    request.on('data', function (data) {
+        answer += data;
 	})
 
-		.on ("end", function () {
+	.on ("end", function () {
+        name = String(querystring.parse(answer).name);
 		if (name != "") {
 			if  (chat.users.length > 0) {
 				if (chat.users.indexOf(name) != "-1") {
@@ -68,7 +69,7 @@ function users (response, request) {
 		} else {
 			chat.users.push (name);
 			response.write(JSON.stringify({name : name}));
-			addMessage ("<i>Вошел пользователь <b>" + name + "</b></i>");
+			addMessage ("СИСТЕМА", "Вошел пользователь " + name);
 		}
 		response.end();
 	});
@@ -80,12 +81,8 @@ function messages(response, request) {
 
 	if (chat.messages.length > 0) {
 
-		let messages =  chat.messages.reduceRight(function(sum, current) {
-			return (sum + "<br><br>" + current);
-		});
-		let users =  chat.users.reduce(function(sum, current) {
-			return (sum + "<p>" + current);
-		},"<p>");
+		let messages = chat.messages;
+		let users =  chat.users;
 
 		response.write(JSON.stringify({"messages" : messages, "users" : users}));
 		response.end();
@@ -96,35 +93,41 @@ function messages(response, request) {
 function send(response, request) {
 	console.log("Request handler 'send' was called.");
 
-	let mess = "",
+	let read = "",
+        mess = "",
 		user = "",
 		err = "";
 
-	request.on ("readable", function () {
-		let read = JSON.parse(request.read());
-		mess = String(read.meassage);
-		user = String(read.user);
+    request.on('data', function (data) {
+        read += data;
 	})
 
-		.on ("end", function () {
+	.on ("end", function () {
+
+        user = String(querystring.parse(read).user);
+        mess = String(querystring.parse(read).message);
 
 		if (err != "") {
 			response.write(JSON.stringify({error : err}));
 		} else {
 			response.write(JSON.stringify({status : "ok"}));
-			let message = "<b>" + user + "</b>: " + mess;
-			addMessage (message);
+			addMessage (user, mess);
 		}
 		response.end();
 	});
 }
 
 // add system message
-function addMessage (mess) {
+function addMessage (user, mess) {
 	let now = new Date();
 	let sec = now.getSeconds();
 	if (sec < 10) sec = "0" + sec;
-	chat.messages.push (`<u>${now.getHours()}:${now.getMinutes()}:${sec}</u> /  ${mess}`);
+	chat.messages.push ({
+        time : `${now.getHours()}:${now.getMinutes()}:${sec}`,
+        message : mess,
+        user : user
+    });
+
 }
 
 // close chat
@@ -134,7 +137,7 @@ function close (response, request) {
 	request.on ("readable", function () {
 		let name = JSON.parse(request.read()).name;
 		name = String(name);
-		addMessage ("<i>Ушел пользователь <b>" + name + "</b></i>");
+		addMessage ("СИСТЕМА", "Ушел пользователь " + name);
 		chat.users.splice(chat.users.indexOf (name), 1);
 	});
 

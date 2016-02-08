@@ -88,16 +88,33 @@ export default class Chat {
             return;
         }
 
-        // convert \r to html <br>
-        let out = this._formInput.value.replace(/\r\n|\r|\n/g,"<br>");
+        let self = this;
 
-        // OK, let's use old XMLHttpRequest
-        let xhr = new XMLHttpRequest();
-        xhr.open ("POST", "/send", true);
-        xhr.send (JSON.stringify({meassage : out, user : this._name}));
+        // send message to the server
+        fetch("/send", {
+            method: "POST",
+            body: 'message='+ this._formInput.value +'&user='+ this._name
+        })
+        .then(function (answer) {
+            return answer.json();
+        })
+        .then(function (answer) {
 
-        // clear chat input
-        this._formInput.value = "";
+            // if we got error from server
+            if (answer.error) {
+                self._error (self._errorPlace, answer.error);
+
+            } else {
+                // clear chat input ater good server response
+                self._formInput.value = "";
+            }
+        })
+        .catch(function (error) {
+            // show error
+            self._error (self._errorPlace, "Произошла ошибка. Попробуйте еще раз");
+        });
+
+
 
     }
 
@@ -132,36 +149,32 @@ export default class Chat {
 
         let self = this;
 
-        // OK, let's use better PROMISE here
-        // send login
-        console.log (name);
-        this.httpSend("POST", "/login", JSON.stringify({"name" : name}))
+        fetch("/login", {
+            method: "POST",
+            body: 'name='+name
+        })
+        .then(function (answer) {
+            return answer.json();
+        })
+        .then(function (answer) {
 
-        // get answer from server
-        .then(
-            result => {
+            // if login is occupied tell it to user
+            if (answer.error) {
+                self._error (self._errorPlace, answer.error);
 
-                let answer = JSON.parse (result);
-
-                // if login is occupied tell it to user
-                if (answer.error) {
-                    self._error (self._errorPlace, answer.error);
-
-                    // if login is free => remove loginform and add username to the top of the page
-                } else {
-                    self._elem.querySelector(".chatLogin").hidden = true;
-                    self._name = answer.name;
-                    self._elem.querySelector(".chatUsername").innerHTML = " - " + self._name;
-                    self._getMessageList ();
-                }
-            },
-            error => {
-                console.log (2222222222);
-                // try again onerror in .5s
-                self._error (self._errorPlace, error);
-                setTimeout(self._login(),500);
+                // if login is free => remove loginform and add username to the top of the page
+            } else {
+                self._elem.querySelector(".chatLogin").hidden = true;
+                self._name = answer.name;
+                self._elem.querySelector(".chatUsername").innerHTML = " - " + self._name;
+                self._getMessageList ();
             }
-        );
+        })
+        .catch(function (error) {
+            // try again onerror in .5s
+            self._error (self._errorPlace, error);
+            setTimeout(self._login(),500);
+        });
 
     }
 
@@ -174,10 +187,9 @@ export default class Chat {
 
         let self = this;
 
-        // OK, let's use modern FETCH here
+        // get messages list from server
         fetch('/messages')
         .then(function(response) {
-
             if (response.status != 200) {
                 throw("Ошибка загрузки");
             }
@@ -187,8 +199,25 @@ export default class Chat {
 
         .then(function(answer) {
 
-            self._messageHistory.innerHTML = answer.messages;
-            self._usersList.innerHTML = answer.users;
+            let messages =  answer.messages.reduceRight(function(sum, current) {
+                let addition = "";
+
+                addition += "<b>" + current.time + "</b> / ";
+                addition += "<i>" + current.user + "</i> : ";
+
+                // convert \r to html <br>
+                let messageConverted = current.message.replace(/\r\n|\r|\n/g,"<br>");
+                addition += messageConverted;
+
+                return (sum + "<br><br>" + addition);
+            }, "");
+            self._messageHistory.innerHTML = messages;
+
+            let users =  answer.users.reduce(function(sum, current) {
+                return (sum + "<p>" + current);
+            },"<p>");
+            self._usersList.innerHTML = users;
+
         })
 
         .catch(function(err) {
@@ -209,7 +238,7 @@ export default class Chat {
         // check if user is in the chat
         if (this._name) {
 
-            // OK, let's use simple XMLHttpRequest again
+            // simple XMLHttpRequest for good-bye, no response required
             let xhr = new XMLHttpRequest();
             xhr.open ("POST", "/close", true);
             xhr.send (JSON.stringify({"name" : this._name}));
@@ -233,35 +262,6 @@ export default class Chat {
     _clearError (obj) {
 
         obj.innerHTML = "";
-
-    }
-
-    /**
-     * function for use PROMISE object
-     */
-    httpSend(method, url, params) {
-
-        return new Promise(function(resolve, reject) {
-
-            var xhr = new XMLHttpRequest();
-            xhr.open(method, url, true);
-
-            xhr.onload = function() {
-                if (this.status == 200) {
-                    resolve(this.response);
-                } else {
-                    var error = new Error(this.statusText);
-                    error.code = this.status;
-                    reject(error);
-                }
-            };
-
-            xhr.onerror = function() {
-             reject(new Error("Network Error"));
-            };
-
-            xhr.send(params);
-        });
 
     }
 
