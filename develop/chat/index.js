@@ -208,8 +208,9 @@ export default class Chat {
                 // convert \r to html <br>
                 let messageConverted = current.message.replace(/\r\n|\r|\n/g,"<br>");
                 addition += messageConverted;
+                if (addition != "") addition += "<br><br>";
 
-                return (sum + "<br><br>" + addition);
+                return (sum  + addition);
             }, "");
             self._messageHistory.innerHTML = messages;
 
